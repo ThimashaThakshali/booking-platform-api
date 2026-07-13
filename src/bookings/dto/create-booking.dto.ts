@@ -5,7 +5,9 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPhoneNumber,
   IsString,
+  Min,
 } from 'class-validator';
 
 import { BookingStatus } from '../enums/booking-status.enum';
@@ -24,12 +26,14 @@ export class CreateBookingDto {
   customerPhone!: string;
 
   @IsNumber()
+  @Min(1)
   serviceId!: number;
 
   @IsDateString()
   bookingDate!: string;
 
   @IsString()
+  @IsNotEmpty()
   bookingTime!: string;
 
   @IsOptional()
