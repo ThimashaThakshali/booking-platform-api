@@ -96,6 +96,17 @@ The application implements the following business rules:
 
 ---
 
+## Main Packages
+
+- @nestjs/swagger
+- @nestjs/jwt
+- passport-jwt
+- bcrypt
+- class-validator
+- class-transformer
+
+---
+
 # Project Structure
 
 ```
@@ -244,6 +255,12 @@ Authorization: Bearer <your_access_token>
 - Docker Support
 - Database Migrations
 - Role-Based Authorization
+
+---
+
+# Swagger Documentation
+
+![Swagger](docs/swagger.png)
 
 ---
 
