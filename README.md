@@ -221,10 +221,24 @@ Authorization: Bearer <your_access_token>
 
 ---
 
+# Bonus Features Implemented
+
+- JWT Authentication
+- Swagger API Documentation
+- Request Validation using class-validator
+- Global Validation Pipe
+- Global Exception Handling
+- Duplicate Email Prevention
+- Duplicate Booking Prevention
+- Booking Search
+- Booking Status Filtering
+- Pagination
+- Inactive Service Validation
+
+---
+
 # Future Improvements
 
-- Pagination
-- Search bookings
 - Refresh Tokens
 - Unit Testing
 - Docker Support
