@@ -36,6 +36,13 @@ export class BookingsService {
       throw new NotFoundException('Service not found');
     }
 
+    // Service must be active
+    if (!service.isActive) {
+      throw new BadRequestException(
+        'Bookings cannot be created for inactive services',
+      );
+    }
+
     // Booking date cannot be in the past
     const bookingDate = new Date(createBookingDto.bookingDate);
     const today = new Date();
@@ -47,7 +54,7 @@ export class BookingsService {
       throw new BadRequestException('Booking date cannot be in the past');
     }
 
-    // Check whether this service is already booked
+    // Prevent duplicate bookings
     const existingBooking = await this.bookingRepository.findOne({
       where: {
         service: { id: createBookingDto.serviceId },
