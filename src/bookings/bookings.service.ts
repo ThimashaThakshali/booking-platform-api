@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 import { Booking } from './entities/booking.entity';
 import { Service } from '../services/entities/service.entity';
@@ -85,11 +85,38 @@ export class BookingsService {
     return this.bookingRepository.save(booking);
   }
 
-  // Get all bookings
-  findAll() {
-    return this.bookingRepository.find({
-      relations: ['service'],
-    });
+  // Get all bookings with filtering, searching and pagination
+  async findAll(status?: string, search?: string, page = 1, limit = 10) {
+    const query = this.bookingRepository
+      .createQueryBuilder('booking')
+      .leftJoinAndSelect('booking.service', 'service');
+
+    // Filter by booking status
+    if (status) {
+      query.andWhere('booking.status = :status', { status });
+    }
+
+    // Search customer name or email
+    if (search) {
+      query.andWhere(
+        '(booking.customerName ILIKE :search OR booking.customerEmail ILIKE :search)',
+        {
+          search: `%${search}%`,
+        },
+      );
+    }
+
+    // Pagination
+    query.skip((page - 1) * limit).take(limit);
+
+    const [data, total] = await query.getManyAndCount();
+
+    return {
+      total,
+      page,
+      limit,
+      data,
+    };
   }
 
   // Get booking by ID

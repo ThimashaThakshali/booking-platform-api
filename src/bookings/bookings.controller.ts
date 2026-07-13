@@ -6,9 +6,16 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { BookingsService } from './bookings.service';
 
@@ -37,13 +44,43 @@ export class BookingsController {
   @ApiOperation({
     summary: 'Get all bookings',
   })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    description: 'Filter by booking status',
+  })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    description: 'Search by customer name or email',
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    example: 10,
+  })
   @ApiResponse({
     status: 200,
-    description: 'Returns all bookings.',
+    description: 'Returns bookings.',
   })
   @Get()
-  findAll() {
-    return this.bookingsService.findAll();
+  findAll(
+    @Query('status') status?: string,
+    @Query('search') search?: string,
+    @Query('page') page = '1',
+    @Query('limit') limit = '10',
+  ) {
+    return this.bookingsService.findAll(
+      status,
+      search,
+      Number(page),
+      Number(limit),
+    );
   }
 
   @ApiOperation({
