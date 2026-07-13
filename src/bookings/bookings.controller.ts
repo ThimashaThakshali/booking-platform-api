@@ -8,8 +8,9 @@ import {
   Post,
 } from '@nestjs/common';
 
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { BookingsService } from './bookings.service';
-import { ApiTags } from '@nestjs/swagger';
 
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
@@ -20,25 +21,55 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
-  // Create booking
+  @ApiOperation({
+    summary: 'Create a booking',
+  })
+  @ApiBody({ type: CreateBookingDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Booking created successfully.',
+  })
   @Post()
   create(@Body() createBookingDto: CreateBookingDto) {
     return this.bookingsService.create(createBookingDto);
   }
 
-  // Get all bookings
+  @ApiOperation({
+    summary: 'Get all bookings',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all bookings.',
+  })
   @Get()
   findAll() {
     return this.bookingsService.findAll();
   }
 
-  // Get booking by ID
+  @ApiOperation({
+    summary: 'Get booking by ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns a booking.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Booking not found.',
+  })
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.bookingsService.findOne(id);
   }
 
-  // Update booking
+  @ApiOperation({
+    summary: 'Update booking',
+  })
+  @ApiBody({ type: UpdateBookingDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Booking updated successfully.',
+  })
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -47,7 +78,13 @@ export class BookingsController {
     return this.bookingsService.update(id, updateBookingDto);
   }
 
-  // Cancel booking
+  @ApiOperation({
+    summary: 'Cancel booking',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Booking cancelled successfully.',
+  })
   @Patch(':id/cancel')
   cancel(@Param('id', ParseIntPipe) id: number) {
     return this.bookingsService.cancel(id);
