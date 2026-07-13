@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { Repository } from 'typeorm';
 
 import { Booking } from './entities/booking.entity';
@@ -46,6 +45,22 @@ export class BookingsService {
 
     if (bookingDate < today) {
       throw new BadRequestException('Booking date cannot be in the past');
+    }
+
+    // Check whether this service is already booked
+    const existingBooking = await this.bookingRepository.findOne({
+      where: {
+        service: { id: createBookingDto.serviceId },
+        bookingDate: createBookingDto.bookingDate,
+        bookingTime: createBookingDto.bookingTime,
+      },
+      relations: ['service'],
+    });
+
+    if (existingBooking) {
+      throw new BadRequestException(
+        'This service is already booked for the selected date and time',
+      );
     }
 
     // Create booking
