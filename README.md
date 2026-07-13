@@ -4,7 +4,9 @@ A RESTful Booking Platform API developed using **NestJS**, **TypeScript**, **Pos
 
 ---
 
-# Features
+# Project Overview
+
+This project is a RESTful Booking Platform API developed using NestJS, TypeScript, PostgreSQL, and TypeORM. It allows authenticated users to manage services while allowing customers to create and manage bookings through secure REST endpoints. The application follows NestJS best practices and includes JWT authentication, validation, Swagger documentation, and business rule enforcement.
 
 ## Authentication
 
@@ -93,6 +95,7 @@ The application implements the following business rules:
 - bcrypt
 - Swagger
 - class-validator
+- Node.js 20+
 
 ---
 
@@ -183,6 +186,16 @@ synchronize: true
 Tables are automatically created when the application starts.
 
 ---
+
+# Database Migrations
+
+This project uses TypeORM with:
+
+```text
+synchronize: true
+```
+
+Therefore, database tables are created automatically during application startup and no manual migration step is required.
 
 # Running the Application
 
